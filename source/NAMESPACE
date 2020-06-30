@@ -1,0 +1,8 @@
+useDynLib(SUITOR)
+import(stats)
+import(utils)
+importFrom("graphics", "legend", "plot", "points")
+import(doParallel)
+import(foreach)
+import(parallel)
+export(suitor, getSummary, plotErrors)

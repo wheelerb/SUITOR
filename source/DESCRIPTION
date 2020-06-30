@@ -1,0 +1,12 @@
+Package: SUITOR
+Title: Selecting the number of mutational signatures through
+        cross-validation
+Version: 0.0.3
+Date: 2020-05-20
+Author: Donghyuk Lee <donghyuk.lee@nih.gov> and Bin Zhu <bin.zhu@nih.gov>
+Description: Selecting the number of mutational signatures through cross-validation
+Maintainer: Bill Wheeler <wheelerb@imsweb.com>
+Depends: R (>= 3.5.0), doParallel, foreach, parallel
+License: GPL-2
+NeedsCompilation: yes
+Packaged: 2020-05-20 15:22:04 UTC; wheelerwi
