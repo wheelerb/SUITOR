@@ -27,17 +27,11 @@
   The SUITOR package uses unsupervised cross-validation to select the optimal number of signatures. 
 
 \section{Installation}
-Installing the SUITOR package from Bioconductor or Github.
+Installing the SUITOR package from Bioconductor.
 \subsection{Install from Bioconductor}
 <<install subHMM>>=
-if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager") 
-BiocManager::install("SUITOR") 
-@
-
-\subsection{Install the developmental version from Github}
-<<install SUITOR from Github>>=
-  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools") 
-  devtools::install_github("binzhulab/SUITOR/source") 
+  #if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager") 
+  #BiocManager::install("SUITOR") 
 @
 
 \section{Loading the package}
@@ -131,9 +125,11 @@ If $detectCores()$ returns a value greater than 1, then that return value may be
 for $n.cores$.
 
 \section{Running suitor() with the default options}
-First we start with the default options. Note that this may take a while to run:
+First we start with the default options. Note that this will take a while to run, so we
+will load the previously saved results.
 <<suitor_default>>=
-re <- suitor(SimData)
+#re <- suitor(SimData)
+load(system.file("extdata", "re.rda", package="SUITOR"))
 str(re)
 @
 
@@ -147,10 +143,12 @@ optimal rank provided by $re\$rank$, a cross validation error plot is created by
 \section{Running suitor() with the different option values}
 To run the function $suitor()$ with different option values discussed above, 
 we create a list of options as follows. Note that the names in the option list
-should be matched with names in the table of options above.
+should be matched with names in the table of options above. Again, given the 
+time it takes to run, previously saved results will be loaded.
 <<suitor_options>>=
 OP  <- list(min.rank=5, max.rank=13, k.fold=5, n.seeds=50, get.summary=0)
-re2 <- suitor(SimData, op=OP)
+#re2 <- suitor(SimData, op=OP)
+load(system.file("extdata", "re2.rda", package="SUITOR"))
 str(re2)
 @
 Since $get.summary$ is set to 0, $suitor()$ only produces a matrix containing all possible results. 
@@ -187,7 +185,8 @@ $print$       & 0 or 1 to print info (0=no printing)           & 1             \
 
 <<suitor_extract_WH>>=
 re$rank
-Extract <- suitor_extract_WH(SimData, re$rank)
+#Extract <- suitor_extract_WH(SimData, re$rank)
+load(system.file("extdata", "Extract.rda", package="SUITOR"))
 head(Extract$W)
 Extract$H[,1:3]
 @
