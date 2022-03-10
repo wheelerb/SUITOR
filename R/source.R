@@ -116,7 +116,7 @@ set_op_par <- function(op) {
   parStart  <- rep(NA, n.cores)
   parEnd    <- rep(NA, n.cores)
   b         <- 0
-  for (i in 1:n.cores) {
+  for (i in seq_len(n.cores)) {
     a           <- b + 1
     b           <- a + m - 1
     if (rem) {
@@ -207,7 +207,7 @@ suitor_main <- function(input, op) {
     ret   <- matrix(data=NA, nrow=nruns, ncol=length(cx))
     colnames(ret) <- cx
     b <- 0  
-    for (i in 1:length(tmp)) {
+    for (i in seq_len(length(tmp))) {
       mat <- tmp[[i]]
       a   <- b + 1
       b   <- a + nrow(mat) - 1
@@ -229,11 +229,11 @@ suitor_par <- function(input, op) {
   i    <- -1
 
   if (op$type == "FORK") {
-    ret <- foreach(i=1:n, .verbose=FALSE, .inorder=FALSE) %dopar% {
+    ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE) %dopar% {
                    suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
            }
   } else {
-    ret <- foreach(i=1:n, .verbose=FALSE, .inorder=FALSE, .packages='SUITOR') %dopar% {
+    ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE, .packages='SUITOR') %dopar% {
                    suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
            }
   }
@@ -259,7 +259,7 @@ suitor_seq_C <- function(input, op, parMat) {
   MISS2       <- -9999.0e99
  
   b <- 0
-  for (i in 1:nseeds) {
+  for (i in seq_len(nseeds)) {
     seed     <- seeds[i]
     tmp      <- parMat[, 3] == seed
     rvec     <- parMat[tmp, 1]
@@ -321,12 +321,12 @@ getSummary <- function(obj, NC, NR=96) {
 
   tmp0 <- is.finite(train) & is.finite(test)
   row  <- 0
-  for (i in 1:nranks) {
+  for (i in seq_len(nranks)) {
     rank <- uranks[i]
     tmpr <- ranks == rank
     CV.1 <- rep(NA, nk)
     CV.2 <- CV.1
-    for (j in 1:nk) {
+    for (j in seq_len(nk)) {
       k    <- uk[j]
       tmpk <- kvec == k
       tmp  <- tmpr & tmpk & tmp0
@@ -429,7 +429,7 @@ default.list <- function(inList, names, default, error=NULL,
   if (is.null(inList)) inList <- list()
 
   listNames <- names(inList)
-  for (i in 1:n1) {
+  for (i in seq_len(n1)) {
     if (!(names[i] %in% listNames)) {
       if (!error[i]) {
         inList[[names[i]]] <- default[[i]]
@@ -457,12 +457,12 @@ getSeqsFromList <- function(inlist) {
 
   ncomb <- 1
   nc    <- length(inlist)
-  for (i in 1:nc) ncomb <- ncomb*length(inlist[[i]])
+  for (i in seq_len(nc)) ncomb <- ncomb*length(inlist[[i]])
   nn    <- names(inlist)
 
   mat <- matrix(NA, nrow=ncomb, ncol=nc)
   if (length(nn)) colnames(mat) <- nn
-  for (j in 1:nc) {
+  for (j in seq_len(nc)) {
      vec  <- inlist[[j]]
      nvec <- length(vec)
      if (j == 1) {

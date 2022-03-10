@@ -49,7 +49,7 @@ extractWH_main <- function(input, op) {
     
     # Combine results
     ret <- NULL
-    for (i in 1:length(tmp)) ret <- rbind(ret, tmp[[i]])     
+    for (i in seq_len(length(tmp))) ret <- rbind(ret, tmp[[i]])     
   }
   colnames(ret) <- c("Start", "Error")
 
@@ -70,7 +70,7 @@ extractWH_seq_C <- function(data, op, parMat) {
   tmp0[is.na(tmp0)] <- FALSE
   flag0   <- any(tmp0)
 
-  for (i in 1:nseeds) {
+  for (i in seq_len(nseeds)) {
     if (print) {
       cat("\r", paste0("start ", i))
       flush.console() 
@@ -105,11 +105,11 @@ extractWH_par <- function(input, op) {
   n    <- op$n.cores
   i    <- -1
   if (op$type == "FORK") {
-    ret <- foreach(i=1:n, .verbose=FALSE, .inorder=FALSE) %dopar% {
+    ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE) %dopar% {
                    extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
            }
   } else {
-    ret <- foreach(i=1:n, .verbose=FALSE, .inorder=FALSE, .packages="SUITOR") %dopar% {
+    ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE, .packages="SUITOR") %dopar% {
                    extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
            }
   }
