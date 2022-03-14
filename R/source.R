@@ -17,7 +17,8 @@ suitor <- function(data, op=NULL) {
 check_data <- function(data) {
 
   if (!length(data)) stop("ERROR with input data")
-  if (!is.matrix(data) && !is.data.frame(data)) stop("ERROR: data must be a matrix or data frame")
+  if (!is.matrix(data) && !is.data.frame(data)) 
+    stop("ERROR: data must be a matrix or data frame")
   data <- as.matrix(data)
   if (!is.matrix(data)) stop("ERROR: data cannot be coerced to a matrix")  
   if (!is.numeric(data)) stop("ERROR: data must be numeric")
@@ -28,10 +29,8 @@ check_data <- function(data) {
 
 }
 
-check_op <- function(op, nc, nr, which=1) {
-
-  # which  1=suitor, 2=extractWH
-
+check_op_valid <- function(op) {
+  
   valid <- c("min.rank", "max.rank", "k.fold", "n.starts",
              "max.iter", "em.eps", "plot", "print",
              "kfold.vec", "min.value", "get.summary",
@@ -49,29 +48,41 @@ check_op <- function(op, nc, nr, which=1) {
     msg <- paste("ERROR: the option(s) ", str, " are not valid", sep="")
     stop(msg)
   }
+  op
+  
+}
+
+check_op <- function(op, nc, nr, which=1) {
+
+  # which  1=suitor, 2=extractWH
+  
+  op <- check_op_valid(op)
+  
   if (which == 2) {
     op$k.fold    <- 1
     op$kfold.vec <- 1
   }
   if (op$min.rank < 1) stop("ERROR with option min.rank")
   if (op$max.rank < 1) stop("ERROR with option max.rank")
-  if (op$min.rank > op$max.rank) stop("ERROR with option min.rank and/or max.rank")
+  if (op$min.rank > op$max.rank) 
+    stop("ERROR with option min.rank and/or max.rank")
   if ((which == 1) && (op$k.fold < 2)) stop("ERROR with option k.fold")
   if (op$n.starts < 1) stop("ERROR with option n.starts")
   if (op$max.iter < 1) stop("ERROR with option max.iter")
   if ((op$em.eps <= 0) || (op$em.eps > 1)) stop("ERROR with option em.eps")
   kvec <- op[["kfold.vec", exact=TRUE]]
   if (!length(kvec)) {
-    op$kfold.vec <- 1:(op$k.fold)
+    op$kfold.vec <- seq_len(op$k.fold)
   } else {
-    tmp <- !(kvec %in% 1:(op$k.fold))
+    tmp <- !(kvec %in% seq_len(op$k.fold))
     if (any(tmp)) stop("ERROR with option kfold.vec") 
   }
   
-  op$seeds <- 1:op$n.starts
+  op$seeds <- seq_len(op$n.starts)
   
   m <- min(nr, nc)
-  if (op$min.rank > m) stop(paste("ERROR: option min.rank cannot exceed ", m, sep=""))
+  if (op$min.rank > m) 
+    stop(paste("ERROR: option min.rank cannot exceed ", m, sep=""))
   op$max.rank <- min(m, op$max.rank)
 
   op <- set_op_par(op)
@@ -242,7 +253,8 @@ suitor_par <- function(input, op) {
 
 initReturnMat <- function(n) {
 
-  tmp           <- c("Rank", "k", "Start", "Error.Train", "Error.Test", "EM.niter")
+  tmp           <- c("Rank", "k", "Start", "Error.Train", "Error.Test",
+                    "EM.niter")
   ret           <- matrix(data=NA, nrow=n, ncol=length(tmp))  
   colnames(ret) <- tmp 
 
@@ -274,8 +286,8 @@ suitor_seq_C <- function(input, op, parMat) {
 
     tmp  <- .C("C_call_suitor", as.numeric(input), as.integer(iargs), 
                as.numeric(dargs), as.integer(rvec), as.integer(kvec), 
-                ret_train=err1, ret_test=err2, ret_conv=convVec, ret_niter=niterVec,
-                PACKAGE="SUITOR")
+                ret_train=err1, ret_test=err2, ret_conv=convVec, 
+                ret_niter=niterVec, PACKAGE="SUITOR")
     err1     <- tmp$ret_train
     err2     <- tmp$ret_test
     niterVec <- tmp$ret_niter
@@ -351,7 +363,8 @@ getSummary <- function(obj, NC, NR=96) {
   }
 
   tab <- as.data.frame(tab, stringsAsFactors=FALSE)
-  tmp <- (1:ncol(tab))[-2]
+  #tmp <- (1:ncol(tab))[-2]
+  tmp <- (seq_len(ncol(tab)))[-2]
   for (i in tmp) tab[, i] <- as.numeric(tab[, i])
   
   tmp  <- is.finite(CV.te)
@@ -383,7 +396,8 @@ plotErrors <- function(x) {
     scale_y_continuous(name="Prediction error")+
     scale_colour_manual(name  ="",
                       breaks=c("Test", "Train"),
-                      labels=c("Validation", "Training"),values=c("red", "blue"))+
+                      labels=c("Validation", "Training"),
+                      values=c("red", "blue"))+
     geom_point(aes(x=x.p, y=y.p), colour="red")+  
     theme_bw()+
     theme(legend.position="bottom")

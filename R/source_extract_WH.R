@@ -21,11 +21,11 @@ suitor_extract_WH <- function(data, rank, op=NULL){
     dim(D_C)     <- c(1, 1) 
   }
   Wn_C           <- apply(W_C, 2, function(x) x/sum(x))
-  colnames(Wn_C) <- paste0("denovo ", LETTERS[1:rank]) 
+  colnames(Wn_C) <- paste0("denovo ", LETTERS[seq_len(rank)]) 
   rownames(Wn_C) <- rownames(data)
   H_C            <- NMF_C$H
   Hn_C           <- D_C %*% as.matrix(H_C)
-  rownames(Hn_C) <- paste0("denovo ", LETTERS[1:rank]) 
+  rownames(Hn_C) <- paste0("denovo ", LETTERS[seq_len(rank)]) 
   
   return(list(W=Wn_C, H=Hn_C))
   
