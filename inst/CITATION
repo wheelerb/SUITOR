@@ -1,0 +1,10 @@
+bibentry(
+  bibtype = "Article",
+  key = "SUITOR",
+  title = "{SUITOR}: Selecting the number of mutational signatures through cross-validation",
+  author = c(person("Donghyuk", "Lee"), person("Bin", "Zhu")),
+  journal = "bioRxiv",
+  year = 2021,
+  url = "https://doi.org/10.1101/2021.07.28.454269"
+)
+
