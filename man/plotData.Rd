@@ -4,21 +4,18 @@
 \alias{plotData}
 
 \title{
-  Example data for plotting
+    Example data for plotting
 }
 \description{
- A data frame with columns Rank, Type, and MSErr
+    A data frame with columns Rank, Type, and MSErr
 }
 %\details{}
 \examples{
 
- data(plotData, package="SUITOR")
+    data(plotData, package="SUITOR")
 
- plotData
+    plotData
 
 }
 \keyword{data}
 \seealso{ \code{\link{suitor}} }
-
-
-

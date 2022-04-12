@@ -4,21 +4,18 @@
 \alias{results}
 
 \title{
-  suitor return object
+    suitor return object
 }
 \description{
- An object returned from the suitor function for examples
+    An object returned from the suitor function for examples
 }
 %\details{ }
 \examples{
 
- data(results, package="SUITOR")
+    data(results, package="SUITOR")
 
- results
+    results
 
 }
 \keyword{data}
 \seealso{ \code{\link{suitor}} }
-
-
-
