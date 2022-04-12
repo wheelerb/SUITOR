@@ -171,7 +171,8 @@ double initVal;
   double *ret, *p;
 
   if (n < 1) error("n < 1 in dVec_alloc");
-  ret = (double *) malloc(n*sizeof(double));
+  /*ret = (double *) malloc(n*sizeof(double));*/
+  ret = (double *) R_Calloc(n, double);
   CHECK_MEM(ret);
   if (initFlag) {
     for (i=0, p=ret; i<n; i++, p++) *p = initVal;
@@ -187,7 +188,8 @@ int n, initFlag, initVal;
   int i, *ret, *p;
 
   if (n < 1) error("n < 1 in iVec_alloc");
-  ret = (int *) malloc(n*sizeof(int));
+  /*ret = (int *) malloc(n*sizeof(int));*/
+  ret = (int *) R_Calloc(n, int);
   CHECK_MEM(ret);
   if (initFlag) {
     for (i=0, p=ret; i<n; i++, p++) *p = initVal;
@@ -206,7 +208,8 @@ char initVal;
   int i;
 
   if (n < 1) error("n < 1 in cVec_alloc");
-  ret = (char *) malloc(n*sizeof(char));
+  /*ret = (char *) malloc(n*sizeof(char));*/
+  ret = (char *) R_Calloc(n, char);
   CHECK_MEM(ret);
   if (initFlag) {
     for (i=0, pret=ret; i<n; i++, pret++) *pret = initVal;
@@ -528,8 +531,8 @@ int wnr, wnc, hnc;
 		}
 	}
 
-  free(sumW);
-  free(pWH);
+  R_Free(sumW);
+  R_Free(pWH);
 
 }
 
@@ -601,8 +604,8 @@ int wnr, wnc, hnc;
 
 	}
 
-	free(sumH);
-       free(pWH);
+	R_Free(sumH);
+    R_Free(pWH);
 }
 
 static void my_update_brunet(i, x, w, h, str)
@@ -1098,10 +1101,10 @@ int rank;
   str->wlen    = (str->wnr)*(str->wnc);
   str->hlen    = (str->hnr)*(str->hnc);
 
-  if (str->w) free(str->w);
-  if (str->h) free(str->h);
-  if (str->w0) free(str->w0);
-  if (str->h0) free(str->h0);
+  if (str->w) R_Free(str->w);
+  if (str->h) R_Free(str->h);
+  if (str->w0) R_Free(str->w0);
+  if (str->h0) R_Free(str->h0);
 
   str->rank    = rank;
   n            = str->wlen;
@@ -1310,25 +1313,25 @@ NMFSTR *str;
 int EMflag;
 {
 
-  free(str->cons);
-  free(str->h_max_index);
-  free(str->runifVec);
+  R_Free(str->cons);
+  R_Free(str->h_max_index);
+  R_Free(str->runifVec);
   
   if (EMflag) {
-    free(str->x_k);
-    free(str->x_k_hat);
-    free(str->x_k0);
-    free(str->logx);
-    free(str->w);
-    free(str->h);
-    free(str->w0);
-    free(str->h0);
-    free(str->tmpVecN);
-    free(str->tmpVecN2);
-    free(str->tmpVecM);
+    R_Free(str->x_k);
+    R_Free(str->x_k_hat);
+    R_Free(str->x_k0);
+    R_Free(str->logx);
+    R_Free(str->w);
+    R_Free(str->h);
+    R_Free(str->w0);
+    R_Free(str->h0);
+    R_Free(str->tmpVecN);
+    R_Free(str->tmpVecN2);
+    R_Free(str->tmpVecM);
 
-    free(str->idxMat);
-    free(str->idxInt);
+    R_Free(str->idxMat);
+    R_Free(str->idxInt);
   }
 
 }
