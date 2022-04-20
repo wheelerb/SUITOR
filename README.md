@@ -8,7 +8,7 @@ since it influences all the downstream steps, including extraction of signature 
  estimation of signature activities and classification of tumors based on the andestimated activities.
  Here we present an **R** package `SUITOR`, an unsupervised cross-validation tool to select 
 the optimal number of signatures. 
-The two main functions are `suitor()` and `suitor_Extract_WH()`.
+The two main functions are `suitor()` and `suitorExtractWH()`.
 
 For more information please refer to the package user maunual and vignette.
 <br/>
