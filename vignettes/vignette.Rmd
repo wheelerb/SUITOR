@@ -9,7 +9,7 @@ vignette: >
     %\VignetteEncoding{UTF-8}
 ---
 
-## Introduction
+# Introduction
 Mutational signatures are patterns of somatic mutations imprinted on the
 cancer genome by operative mutational processes, and have been proposed 
 to identify cancer predisposition genes and to stratify cancer patients 
@@ -25,31 +25,31 @@ in cancer genomics studies.
 The SUITOR package uses unsupervised cross-validation to select the optimal
 number of signatures.
 
-### 1. Installing the SUITOR package from Bioconductor
+# Installing the SUITOR package from Bioconductor
 ```{r, eval=FALSE}
     if (!requireNamespace("BiocManager", quietly = TRUE)) 
         install.packages("BiocManager") 
     BiocManager::install("SUITOR") 
 ```
 
-### 2. Loading the package
+# Loading the package
 Before using the SUITOR package, it must be loaded into an R session.
 ```{r}
 library(SUITOR)
 ```
 
-### 3. Example data
+# Example data
 For illustrative purposes, we simulated a 96 by 300 mutational catalog
 matrix which contains 300 tumors with respect to 96 single base substitution 
 categories. Each element of the matrix is generated from the Poisson 
 distribution with the mean corresponding to each element 
-of *WH*, where *W* is the true signature matrix of size 96 by 8 for 8 
-signatures, and *H* is the activity matrix of size 8 by 300.
-Specifically for *W*, we used the profile of eight COSMIC signatures 
+of `WH`, where `W` is the true signature matrix of size 96 by 8 for 8 
+signatures, and `H` is the activity matrix of size 8 by 300.
+Specifically for `W`, we used the profile of eight COSMIC signatures 
 4, 6, 7a, 9, 17b, 22, 26, 39 from
 [**COSMIC**](https://cancer.sanger.ac.uk/cosmic/signatures/SBS).
-*H* is generated from a uniform distribution
-between 0 and 100 with some randomly chosen elements of *H* set to 0 in order
+`H` is generated from a uniform distribution
+between 0 and 100 with some randomly chosen elements of `H` set to 0 in order
 to mimic real data.
 ```{r}
     data(SimData, package="SUITOR")
@@ -57,176 +57,133 @@ to mimic real data.
     SimData[1:6, 1:6]
 ```
 
-### 4. Selecting the number of mutational signatures
-The main function **suitor(data, op)** is to select the number of mutational
+# Selecting the number of mutational signatures
+The main function `suitor(data, op)` is to select the number of mutational
 signatures based on cross-validation. It has two arguments described below.
 
-### 4.1 Input data
-The first argument of the function **suitor()** is *data*. It could be an R 
+## Input data
+The first argument of the function `suitor()` is `data`. It could be an R 
 data frame or matrix containing a mutational catalog whose elements are 
 non-negative counts.
-Each column of *data* corresponds to a tumor (or sample) while its rows 
+Each column of `data` corresponds to a tumor (or sample) while its rows 
 represent a mutation type. Although selection of the number of signatures 
 is independent to the order of mutation type, we specify the order of 
 mutation type according to the 
 [**COSMIC database**](https://cancer.sanger.ac.uk/signatures/sbs/) 
-for extracting signature profiles using **suitorExtractWH()** after
+for extracting signature profiles using `suitorExtractWH()` after
 estimating the optimal rank.
 
-### 4.2 Options
+## Options
 Since SUITOR is based on cross-validation and the Expectation Conditional
 Maximization (ECM) algorithm, it is necessary to set a list of tuning 
 parameters which control the fitting process. These parameters are defined
 in the table below.
 
-```{r table1, echo=FALSE, message=FALSE, results='asis'}
-tabl <- "
-|Name        | Description                                   | Default Value |
-|------------|-----------------------------------------------|---------------|
-|min.value   | Minimum value of matrix before factorizing    | 1e-4          |
-|min.rank    | Minimum rank                                  | 1             |
-|max.rank    | Maximum rank                                  | 10            |
-|k.fold      | Number of folds                               | 10            |
-|em.eps      | EM algorithm stopping tolerance               | 1e-5          |
-|max.iter    | Maximum number of iterations in EM algorithm  | 2000          |
-|n.starts    | Number of starting points                     | 30            |
-|n.cores     | Number of cores to use                        | 1             |
-|get.summary | 0 or 1 to create summary results              | 1             |
-|plot        | 0 or 1 to produce an error plot               | 1             |
-|print       | 0 or 1 to print info (0=no printing)          | 1             |
-|------------|-----------------------------------------------|---------------|
-"
-cat(tabl)
+```{r table1, echo=FALSE}
+v1 <- c("min.value", "min.rank", "max.rank", "k.fold", "em.eps", "max.iter",
+        "n.starts", "n.cores", "get.summary", "plot", "print")       
+v2 <- c("Minimum value of matrix before factorizing", "Minimum rank",
+        "Maximum rank", "Number of folds", "EM algorithm stopping tolerance", 
+        "Maximum number of iterations in EM algorithm", 
+        "Number of starting points", "Number of cores to use",
+        "0 or 1 to create summary results", "0 or 1 to produce an error plot",
+        "0 or 1 to print info (0=no printing)")
+v3 <- c("1e-4", "1", "10", "10", "1e-5", "2000", "30", "1", "1", "1", "1")        
+tab1 <- data.frame(Name=v1, Description=v2, "Default Value"=v3,
+                   stringsAsFactors=FALSE, check.names=FALSE)
+knitr::kable(tab1)
 ```
 
-The option *min.value* is a small number added to the data matrix for stable 
+The option `min.value` is a small number added to the data matrix for stable 
 computation of non-negative matrix factorization. For a given number of 
-signatures or ranks *r (min.rank <= r <= max.rank)*, the data matrix is 
-divided into *k.fold* parts for the cross-validation. The default value of 
-the maximal rank *max.rank* is 10 but it can be changed depending on the 
-cancer type. The default value of the number of folds K (*k.fold*) is 10 and 
+signatures or ranks `rnk (min.rank <= rnk <= max.rank)`, the data matrix is 
+divided into `k.fold` parts for the cross-validation. The default value of 
+the maximal rank `max.rank` is 10 but it can be changed depending on the 
+cancer type. The default value of the number of folds K (`k.fold`) is 10 and 
 it can be modified depending on the computer resources.
 Since the ECM algorithm may converge to a local saddle point, 
-SUITOR tries multiple initial values for *W* and *H*. 
-For this purpose, the number of starts (*n.starts*) is used. 
-Although the default *n.starts* is set to 30, it can be increased
+SUITOR tries multiple initial values for `W` and `H`. 
+For this purpose, the number of starts (`n.starts`) is used. 
+Although the default `n.starts` is set to 30, it can be increased
 depending on the size of the data matrix and/or computational resources.
-For the ECM algorithm, the default value of the maximal iteration *max.iter*
+For the ECM algorithm, the default value of the maximal iteration `max.iter`
 is set to 2000. It is possible for some cases to reach the maximal iteration,
 for which the function would produce a warning message. Overall, we 
-recommend a two-stage approach where the user would run *suitor()* with the 
+recommend a two-stage approach where the user would run `suitor()` with the 
 default option first and then narrow down the set of plausible ranks 
-(*min.rank <= r <= max.rank*) with more starts (*n.starts*) and a larger 
-number of maximal iteration (*max.iter*) if necessary.
+(`min.rank <= rnk <= max.rank`) with more starts (`n.starts`) and a larger 
+number of maximal iteration (`max.iter`) if necessary.
 To ease the computation burden, SUITOR supports parallel computing by 
-specifying *n.cores* greater than 1. To check whether parallel computing is 
-available for the computer, the **detectCores()** function can be used.
-If **detectCores()** returns a value greater than 1, then that return value 
-may be used for *n.cores*.
+specifying `n.cores` greater than 1. To check whether parallel computing is 
+available for the computer, the `detectCores()` function can be used.
+If `detectCores()` returns a value greater than 1, then that return value 
+may be used for `n.cores`.
 
-### 5. Running suitor() with the default options
-First we start with the default options. Note that this will take a while to
-run, so we will load the previously saved results.
-```{r eval=FALSE}
+# Running suitor() 
+By default, the `suitor()` function returns a
+list containing the estimated optimal rank (`re$rank`), a summary matrix
+(`re$summary`) where cross validation errors are tabulated, as well as 
+the detailed results (`re$all.results`) which contain the training and 
+testing errors, the total number of ECM updates, and options (`re$op`) 
+used by the `suitor()` function. In addition to the estimated optimal rank 
+provided by `re$rank`, a cross validation error plot is created by default.
+
+```{r}
+OP  <- list(max.rank=3, k.fold=5, n.starts=4)
 set.seed(123)
-re <- suitor(SimData)
-```
-```{r echo=FALSE}
-load(system.file("extdata", "re.rda", package="SUITOR"))
+re <- suitor(SimData, op=OP)
 str(re)
 ```
 
-By default, the **suitor()** function returns a
-list containing the estimated optimal rank (*re$rank*), a summary matrix
-(*re$summary*) where cross validation errors are tabulated, as well as 
-the detailed results (*re$all.results*) which contain the training and 
-testing errors, the total number of ECM updates, and options (*re$op*) 
-used by the **suitor()** function. In addition to the estimated optimal rank 
-provided by *re$rank*, a cross validation error plot is created by default.
-
-### 6. Running suitor() with the different option values
-To run the function **suitor()** with different option values discussed above, 
-we create a list of options as follows. Note that the names in the option list
-should be matched with names in the table of options above. Again, given the 
-time it takes to run, previously saved results will be loaded.
-```{r eval=FALSE}
-OP  <- list(min.rank=5, max.rank=13, k.fold=5, n.seeds=50, get.summary=0)
-set.seed(123)
-re2 <- suitor(SimData, op=OP)
-```
-
-```{r echo=FALSE}
-load(system.file("extdata", "re2.rda", package="SUITOR"))
-str(re2)
-```
-
-Since *get.summary* is set to 0, **suitor()** only produces a matrix containing 
-all possible results. In that case, as shown below one needs to use the 
-**getSummary(obj, NC, NR)** function to compute the estimated optimal rank, 
-where *obj* is the matrix containing all results from **suitor()**, *NC* and 
-*NR* are the numbers of columns and rows respectively in the input data for 
-**suitor()**. Please note that *NR* has a default value of 96 for single base 
-substitution signature analysis. The **plotErrors()** function can be used to 
-draw a cross validation error plot.
-```{r}
-Summary2 <- getSummary(re2$all.results, ncol(SimData))
-str(Summary2)
-```
-
-### 7. Extracting the signature profiles and activities
+# Extracting the signature profiles and activities
 Once the optimal number of signatures or called rank is estimated by 
-**suitor()**, we can extract the signature profiles *W* and activities
-*H* with the function **suitorExtractWH(data, rank, op)**. 
-As in the **suitor()** function, the input data is a data frame or matrix 
+`suitor()`, we can extract the signature profiles `W` and activities
+`H` with the function `suitorExtractWH(data, rank, op)`. 
+As in the `suitor()` function, the input data is a data frame or matrix 
 containing a mutational catalog whose elements are non-negative counts. 
 A non-negative integer rank is the number of mutational signatures to be 
 extracted. The possible option values are summarized in the
-following table and they can be used in the same manner as **suitor()**.
+following table and they can be used in the same manner as `suitor()`.
 
-```{r table2, echo=FALSE, message=FALSE, results='asis'}
-tabl <- "
-|Name      | Description                                | Default Value |
-|----------|--------------------------------------------|---------------|
-|min.value | Minimum value of matrix before factorizing | 1e-4          |
-|n.starts  | Number of starting points                  | 30            |
-|n.cores   | Number of cores to use                     | 1             |
-|print     | 0 or 1 to print info (0=no printing)       | 1             |
-|----------|--------------------------------------------|---------------|
-"
-cat(tabl)
+```{r table2, echo=FALSE}
+v1 <- c("min.value", "n.starts", "n.cores", "print")
+v2 <- c("Minimum value of matrix before factorizing", 
+        "Number of starting points", "Number of cores to use",
+        "0 or 1 to print info (0=no printing)")
+v3 <- c("1e-4", "30", "1", "1")
+tab2 <- data.frame(Name=v1, Description=v2, "Default Value"=v3,
+                   stringsAsFactors=FALSE, check.names=FALSE)
+knitr::kable(tab2)
 ```
 
-```{r eval=FALSE}
+
+```{r}
 re$rank
 set.seed(123)
-Extract <- suitorExtractWH(SimData, re$rank)
+#Extract <- suitorExtractWH(SimData, re$rank)
+#head(Extract$W)
+#Extract$H[,1:3]
 ```
 
-```{r echo=FALSE}
-load(system.file("extdata", "Extract.rda", package="SUITOR"))
-head(Extract$W)
-Extract$H[,1:3]
-```
+`Extract$W` and `Extract$H` are estimated matrices for the profile `W`
+and the activity `H`, respectively.
 
-*Extract$W* and *Extract$H* are estimated matrices for the profile *W*
-and the activity *H*, respectively.
-
-### 8. Summarizing signature profiles with MutationalPatterns
+# Summarizing signature profiles with MutationalPatterns
 The R package MutationalPatterns (Blokzijl et al., 2021) provides some utility
 functions to summarize signature profiles and contains matrices of pre-defined
-signatures like COSMIC. The function **plot_96_profile()** can draw 
+signatures like COSMIC. The function `plot_96_profile()` can draw 
 the signature profile plot with respect to the 96 trinucleotide categories.
-In addition, the function **cos\_sim\_matrix()** computes the cosine similarity 
+In addition, the function `cos_sim_matrix()` computes the cosine similarity 
 between two profiles.
 ```{r}
-library(MutationalPatterns)
+suppressPackageStartupMessages(library(MutationalPatterns))
 COSMIC <- get_known_signatures(source = "COSMIC_v3.2")
-plot_96_profile(Extract$W, condensed=TRUE, ymax=0.3)
-CS <- cos_sim_matrix(Extract$W, COSMIC)
-CS[, 1:3]
+#plot_96_profile(Extract$W, condensed=TRUE, ymax=0.3)
+#CS <- cos_sim_matrix(Extract$W, COSMIC)
+#CS[, 1:3]
 ```
 
-### 9. Session Information
+# Session Information
 ```{r}
 sessionInfo()
 ```
