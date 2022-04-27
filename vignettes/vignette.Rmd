@@ -88,7 +88,7 @@ v2 <- c("Minimum value of matrix before factorizing", "Minimum rank",
         "Number of starting points", "Number of cores to use",
         "0 or 1 to create summary results", "0 or 1 to produce an error plot",
         "0 or 1 to print info (0=no printing)")
-v3 <- c("1e-4", "1", "10", "10", "1e-5", "2000", "30", "1", "1", "1", "1")        
+v3 <- c("1e-4", "1", "10", "10", "1e-5", "2000", "30", "1", "1", "1", "1")
 tab1 <- data.frame(Name=v1, Description=v2, "Default Value"=v3,
                    stringsAsFactors=FALSE, check.names=FALSE)
 knitr::kable(tab1)
@@ -160,9 +160,9 @@ knitr::kable(tab2)
 ```{r}
 re$rank
 set.seed(123)
-#Extract <- suitorExtractWH(SimData, re$rank)
-#head(Extract$W)
-#Extract$H[,1:3]
+Extract <- suitorExtractWH(SimData, re$rank)
+head(Extract$W)
+Extract$H[,1:3]
 ```
 
 `Extract$W` and `Extract$H` are estimated matrices for the profile `W`
@@ -178,9 +178,9 @@ between two profiles.
 ```{r}
 suppressPackageStartupMessages(library(MutationalPatterns))
 COSMIC <- get_known_signatures(source = "COSMIC_v3.2")
-#plot_96_profile(Extract$W, condensed=TRUE, ymax=0.3)
-#CS <- cos_sim_matrix(Extract$W, COSMIC)
-#CS[, 1:3]
+plot_96_profile(Extract$W, condensed=TRUE, ymax=0.3)
+CS <- cos_sim_matrix(Extract$W, COSMIC)
+CS[, 1:3]
 ```
 
 # Session Information
