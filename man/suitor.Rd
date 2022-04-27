@@ -29,7 +29,7 @@
     n.starts    \tab Number of starting points \tab 30            \cr
     plot        \tab 0 or 1 to produce an error plot \tab 1 \cr
     print       \tab 0 or 1 to print info \tab 1 \cr 
-    type        \tab Socket type in \code{\link[parallel]{makeCluster}} for
+    type        \tab Socket type in \code{\link[BiocParallel]{SnowParam}} for
         parallel computing \tab NULL \cr
     kfold.vec   \tab Vector of values in 1:k.fold when running on a cluster
         \tab NULL
@@ -37,14 +37,8 @@
 
     \bold{Parallel computing} \cr
     If \code{n.cores > 1} and \code{type = NULL}, then \code{type} will be set 
-    to "FORK" when running on unix, and set to "PSOCK" otherwise. \cr
-    \bold{NOTE:} The R_LIBS_USER environment variable may need to be set to the
-    path where the SUITOR R package was installed, especially if it was not 
-    installed in the default location. Examples of setting the 
-    R_LIBS_USER environment variable on unix and windows are below. \cr
-    (unix) export R_LIBS_USER=/path/to/SUITOR/package \cr
-    (windows) set R_LIBS_USER=/path/to/SUITOR/package \cr
-
+    to "FORK" when running on unix, and set to "SOCK" otherwise. \cr
+    
     \bold{Utilizing a cluster} \cr
     When running on a cluster, the option \code{get.summary} should be set 
     to 0.

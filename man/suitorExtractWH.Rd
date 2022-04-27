@@ -21,19 +21,13 @@
     n.cores     \tab Number of cores to use for parallel computing \tab 1 \cr
     n.starts    \tab Number of starting points     \tab 30            \cr
     print       \tab 0 or 1 to print info         \tab 1             \cr 
-    type        \tab Socket type in \code{\link[parallel]{makeCluster}} for 
+    type        \tab Socket type in \code{\link[BiocParallel]{SnowParam}} for 
         parallel computing \tab NULL       
     }
 
     \bold{Parallel computing} \cr
     If \code{n.cores > 1} and \code{type = NULL}, then \code{type} will be 
-    set to "FORK" when running on unix, and set to "PSOCK" otherwise. \cr
-    \bold{NOTE:} The R_LIBS_USER environment variable may need to be set to 
-    the path where the SUITOR R package was installed, especially if it 
-    was not installed in the default location. Examples of setting the 
-    R_LIBS_USER environment variable on unix and windows are below. \cr
-    (unix) export R_LIBS_USER=/path/to/SUITOR/package \cr
-    (windows) set R_LIBS_USER=/path/to/SUITOR/package \cr
+    set to "FORK" when running on unix, and set to "SOCK" otherwise. \cr
 }
 \value{ A list containing the objects:
     \itemize{
