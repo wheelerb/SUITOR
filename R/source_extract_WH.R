@@ -36,18 +36,8 @@ extractWH_main <- function(input, op) {
     n <- op$n.cores
     if (n < 2) {
         ret <- extractWH_seq_C(input, op, op$parMat)
-    } else {
-        if (op$type == "FORK") {
-            clus  <- makeForkCluster(n)
-        } else {
-            clus  <- makeCluster(n, type=op$type)
-            clusterExport(cl=clus, 
-                    c("extractWH_seq_C", "my_nmf_C", "get_iargs", "get_dargs"), 
-                    envir=environment())
-        }
-        registerDoParallel(clus)
+    } else {    
         tmp <- extractWH_par(input, op)
-        stopCluster(clus)
 
         # Combine results
         ret <- NULL
@@ -106,15 +96,11 @@ extractWH_par <- function(input, op) {
     b    <- op$parEnd
     n    <- op$n.cores
     i    <- -1
-    if (op$type == "FORK") {
-        ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE) %dopar% {
-            extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
-        }
-    } else {
-        ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE,
-            .packages="SUITOR") %dopar% {
-            extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
-        }
-    }
+ 
+    ret <- bplapply(seq_len(n), function(i, input, op, mat, a, b) {
+                extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])
+                    }, input, op, mat, a, b, 
+                    BPPARAM=SnowParam(workers=n, type=op$type))
+
     ret
 }

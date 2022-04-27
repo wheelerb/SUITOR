@@ -20,10 +20,10 @@ check_data <- function(data) {
     if (!is.matrix(data) && !is.data.frame(data)) 
         stop("ERROR: data must be a matrix or data frame")
     data <- as.matrix(data)
-    if (!is.matrix(data)) stop("ERROR: data cannot be coerced to a matrix")  
+    if (!is.matrix(data)) stop("ERROR: data cannot be coerced to a matrix")
     if (!is.numeric(data)) stop("ERROR: data must be numeric")
-    if (any(data < 0)) stop("ERROR: data must be non-negative") 
-    if (any(!is.finite(data))) stop("ERROR: data must be non-negative") 
+    if (any(data < 0)) stop("ERROR: data must be non-negative")
+    if (any(!is.finite(data))) stop("ERROR: data must be non-negative")
 
     data
 
@@ -104,7 +104,7 @@ set_op_type <- function(type) {
         if ("unix" %in% os) {
             type <- "FORK"
         } else {
-            type <- "PSOCK" 
+            type <- "SOCK" 
         }
     }
     type <- toupper(removeWhiteSpace(type))
@@ -210,16 +210,7 @@ suitor_main <- function(input, op) {
     if (n < 2) {
         ret <- suitor_seq_C(input, op, op$parMat)
     } else {
-        if (op$type == "FORK") {
-            clus  <- makeForkCluster(n)
-        } else {
-            clus <- makeCluster(n, type=op$type)
-            obj  <- c("suitor_seq_C", "initReturnMat", "get_iargs", "get_dargs")
-            clusterExport(cl=clus, obj, envir=environment())
-        }   
-        registerDoParallel(clus)
         tmp <- suitor_par(input, op)
-        stopCluster(clus)
 
         # Combine results
         nruns <- nrow(op$parMat)
@@ -248,16 +239,11 @@ suitor_par <- function(input, op) {
     n    <- op$n.cores
     i    <- -1
 
-    if (op$type == "FORK") {
-        ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE) %dopar% {
-            suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
-        }
-    } else {
-        ret <- foreach(i=seq_len(n), .verbose=FALSE, .inorder=FALSE, 
-            .packages='SUITOR') %dopar% {
-            suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])  
-        }
-    }
+    ret <- bplapply(seq_len(n), function(i, input, op, mat, a, b) {
+                    suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])
+                    }, input, op, mat, a, b, 
+                    BPPARAM=SnowParam(workers=n, type=op$type))
+
     ret
 }
 
