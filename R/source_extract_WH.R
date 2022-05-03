@@ -96,11 +96,12 @@ extractWH_par <- function(input, op) {
     b    <- op$parEnd
     n    <- op$n.cores
     i    <- -1
- 
+    bp   <- op$BPPARAM
+
     ret <- bplapply(seq_len(n), function(i, input, op, mat, a, b) {
                 extractWH_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])
                     }, input, op, mat, a, b, 
-                    BPPARAM=SnowParam(workers=n, type=op$type))
+                    BPPARAM=bp)
 
     ret
 }

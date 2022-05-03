@@ -34,7 +34,7 @@ check_op_valid <- function(op) {
     valid <- c("min.rank", "max.rank", "k.fold", "n.starts",
         "max.iter", "em.eps", "plot", "print",
         "kfold.vec", "min.value", "get.summary",
-        "n.cores", "type")
+        "n.cores", "BPPARAM")
     def   <- list(1, 10, 10, 30,
         2000, 1e-5, TRUE, 1,
         NULL, 0.0001, 1,
@@ -88,29 +88,10 @@ check_op <- function(op, nc, nr, which=1) {
     op <- set_op_par(op)
     op$algorithm <- 1
 
-    op$type <- set_op_type(op[["type", exact=TRUE]])
-    type    <- op$type
-    if ((length(type) != 1) || !is.character(type)) 
-        stop("ERROR with option type")
-
     op
 
 }
 
-set_op_type <- function(type) {
-
-    if (is.null(type)) {
-        os <- tolower(.Platform$OS.type)
-        if ("unix" %in% os) {
-            type <- "FORK"
-        } else {
-            type <- "SOCK" 
-        }
-    }
-    type <- toupper(removeWhiteSpace(type))
-    type
-
-}
 
 set_op_par <- function(op) {
 
@@ -121,6 +102,13 @@ set_op_par <- function(op) {
 
     if ((n.cores < 2) || (n.runs < 2)) {
         op$n.cores <- 1
+    }
+
+    if (op$n.cores > 1) {
+        bp <- op[["BPPARAM", exact=TRUE]]
+        if (is.null(bp)) bp <- bpparam()
+        op$n.cores <- bpnworkers(bp)
+        op$BPPARAM <- bp 
     }
 
     mat       <- getSeqsFromList(list(op$seeds, op$kfold.vec, rvec))
@@ -238,11 +226,12 @@ suitor_par <- function(input, op) {
     b    <- op$parEnd
     n    <- op$n.cores
     i    <- -1
+    bp   <- op$BPPARAM
 
     ret <- bplapply(seq_len(n), function(i, input, op, mat, a, b) {
                     suitor_seq_C(input, op, mat[a[i]:b[i], , drop=FALSE])
                     }, input, op, mat, a, b, 
-                    BPPARAM=SnowParam(workers=n, type=op$type))
+                    BPPARAM=bp)
 
     ret
 }
