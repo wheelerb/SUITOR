@@ -25,19 +25,21 @@
     max.rank    \tab Maximum rank \tab 10            \cr
     min.rank    \tab Minimum rank \tab 1             \cr
     min.value   \tab Minimum value of matrix before factorizing \tab 1e-4 \cr
-    n.cores     \tab Number of cores to use for parallel computing \tab 1 \cr
+    n.cores     \tab Set to a value greater than 1 for parallel computing
+    \tab 1 \cr
+    BPPARAM     \tab See \code{\link[BiocParallel]{BiocParallelParam}} 
+    \tab NULL \cr
     n.starts    \tab Number of starting points \tab 30            \cr
     plot        \tab 0 or 1 to produce an error plot \tab 1 \cr
     print       \tab 0 or 1 to print info \tab 1 \cr 
-    type        \tab Socket type in \code{\link[BiocParallel]{SnowParam}} for
-        parallel computing \tab NULL \cr
     kfold.vec   \tab Vector of values in 1:k.fold when running on a cluster
         \tab NULL
     }
 
     \bold{Parallel computing} \cr
-    If \code{n.cores > 1} and \code{type = NULL}, then \code{type} will be set 
-    to "FORK" when running on unix, and set to "SOCK" otherwise. \cr
+    The \code{BiocParallel} package is used for parallel computing.
+    If \code{n.cores > 1} and \code{BPPARAM = NULL}, then \code{BPPARAM} 
+    will be set to \code{\link[BiocParallel]{bpparam}}. \cr
     
     \bold{Utilizing a cluster} \cr
     When running on a cluster, the option \code{get.summary} should be set 

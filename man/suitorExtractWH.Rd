@@ -18,16 +18,19 @@
     \tabular{lll}{
     \bold{Name} \tab \bold{Description} \tab \bold{Default Value} \cr
     min.value   \tab Minimum value of matrix before factorizing \tab 1e-4 \cr
-    n.cores     \tab Number of cores to use for parallel computing \tab 1 \cr
+    n.cores     \tab Set to a value greater than 1 for parallel computing 
+    \tab 1 \cr
+    BPPARAM    \tab See \code{\link[BiocParallel]{BiocParallelParam}} 
+    \tab NULL \cr
     n.starts    \tab Number of starting points     \tab 30            \cr
-    print       \tab 0 or 1 to print info         \tab 1             \cr 
-    type        \tab Socket type in \code{\link[BiocParallel]{SnowParam}} for 
-        parallel computing \tab NULL       
+    print       \tab 0 or 1 to print info         \tab 1             \cr       
     }
 
     \bold{Parallel computing} \cr
-    If \code{n.cores > 1} and \code{type = NULL}, then \code{type} will be 
-    set to "FORK" when running on unix, and set to "SOCK" otherwise. \cr
+    The \code{BiocParallel} package is used for parallel computing.
+    If \code{n.cores > 1} and \code{BPPARAM = NULL}, then \code{BPPARAM} 
+    will be set to \code{\link[BiocParallel]{bpparam}}. \cr
+
 }
 \value{ A list containing the objects:
     \itemize{
