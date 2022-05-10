@@ -34,11 +34,11 @@ check_op_valid <- function(op) {
     valid <- c("min.rank", "max.rank", "k.fold", "n.starts",
         "max.iter", "em.eps", "plot", "print",
         "kfold.vec", "min.value", "get.summary",
-        "n.cores", "BPPARAM")
+        "BPPARAM")
     def   <- list(1, 10, 10, 30,
         2000, 1e-5, TRUE, 1,
         NULL, 0.0001, 1,
-        1, NULL)
+        NULL)
     op  <- default.list(op, valid, def)
     nm  <- names(op)
     tmp <- !(nm %in% valid)
@@ -95,21 +95,18 @@ check_op <- function(op, nc, nr, which=1) {
 
 set_op_par <- function(op) {
 
-    n.cores <- op[["n.cores", exact=TRUE]]
-    if (!length(n.cores)) n.cores <- 1
     rvec    <- (op$min.rank):(op$max.rank)
     n.runs  <- length(op$seeds)*length(op$kfold.vec)*length(rvec)
 
-    if ((n.cores < 2) || (n.runs < 2)) {
+    bp <- op[["BPPARAM", exact=TRUE]]
+    if (is.null(bp)) bp <- bpparam()
+    op$n.cores <- bpnworkers(bp)
+    op$BPPARAM <- bp 
+    
+    if ((op$n.cores < 2) || (n.runs < 2)) {
         op$n.cores <- 1
     }
-
-    if (op$n.cores > 1) {
-        bp <- op[["BPPARAM", exact=TRUE]]
-        if (is.null(bp)) bp <- bpparam()
-        op$n.cores <- bpnworkers(bp)
-        op$BPPARAM <- bp 
-    }
+    n.cores <- op$n.cores
 
     mat       <- getSeqsFromList(list(op$seeds, op$kfold.vec, rvec))
     tmp       <- mat[, 1]
