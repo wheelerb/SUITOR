@@ -37,7 +37,7 @@
     \bold{Parallel computing} \cr
     The \code{BiocParallel} package is used for parallel computing.
     If \code{BPPARAM = NULL}, then \code{BPPARAM} 
-    will be set to \code{\link[BiocParallel]{bpparam}}. \cr
+    will be set to \code{\link[BiocParallel]{SerialParam}}. \cr
     
     \bold{Utilizing a cluster} \cr
     When running on a cluster, the option \code{get.summary} should be set 

@@ -27,7 +27,7 @@
     \bold{Parallel computing} \cr
     The \code{BiocParallel} package is used for parallel computing.
     If \code{BPPARAM = NULL}, then \code{BPPARAM} 
-    will be set to \code{\link[BiocParallel]{bpparam}}. \cr
+    will be set to \code{\link[BiocParallel]{SerialParam}}. \cr
 
 }
 \value{ A list containing the objects:
