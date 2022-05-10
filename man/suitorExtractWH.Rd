@@ -18,8 +18,6 @@
     \tabular{lll}{
     \bold{Name} \tab \bold{Description} \tab \bold{Default Value} \cr
     min.value   \tab Minimum value of matrix before factorizing \tab 1e-4 \cr
-    n.cores     \tab Set to a value greater than 1 for parallel computing 
-    \tab 1 \cr
     BPPARAM    \tab See \code{\link[BiocParallel]{BiocParallelParam}} 
     \tab NULL \cr
     n.starts    \tab Number of starting points     \tab 30            \cr
@@ -28,7 +26,7 @@
 
     \bold{Parallel computing} \cr
     The \code{BiocParallel} package is used for parallel computing.
-    If \code{n.cores > 1} and \code{BPPARAM = NULL}, then \code{BPPARAM} 
+    If \code{BPPARAM = NULL}, then \code{BPPARAM} 
     will be set to \code{\link[BiocParallel]{bpparam}}. \cr
 
 }
