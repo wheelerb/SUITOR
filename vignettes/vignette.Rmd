@@ -81,14 +81,14 @@ in the table below.
 
 ```{r table1, echo=FALSE}
 v1 <- c("min.value", "min.rank", "max.rank", "k.fold", "em.eps", "max.iter",
-        "n.starts", "n.cores", "get.summary", "plot", "print")       
+        "n.starts", "get.summary", "plot", "print")       
 v2 <- c("Minimum value of matrix before factorizing", "Minimum rank",
         "Maximum rank", "Number of folds", "EM algorithm stopping tolerance", 
         "Maximum number of iterations in EM algorithm", 
-        "Number of starting points", "Number of cores to use",
+        "Number of starting points", 
         "0 or 1 to create summary results", "0 or 1 to produce an error plot",
         "0 or 1 to print info (0=no printing)")
-v3 <- c("1e-4", "1", "10", "10", "1e-5", "2000", "30", "1", "1", "1", "1")
+v3 <- c("1e-4", "1", "10", "10", "1e-5", "2000", "30", "1", "1", "1")
 tab1 <- data.frame(Name=v1, Description=v2, "Default Value"=v3,
                    stringsAsFactors=FALSE, check.names=FALSE)
 knitr::kable(tab1)
@@ -113,11 +113,7 @@ recommend a two-stage approach where the user would run `suitor()` with the
 default option first and then narrow down the set of plausible ranks 
 (`min.rank <= rnk <= max.rank`) with more starts (`n.starts`) and a larger 
 number of maximal iteration (`max.iter`) if necessary.
-To ease the computation burden, SUITOR supports parallel computing by 
-specifying `n.cores` greater than 1. To check whether parallel computing is 
-available for the computer, the `detectCores()` function can be used.
-If `detectCores()` returns a value greater than 1, then that return value 
-may be used for `n.cores`.
+
 
 # Running suitor() 
 By default, the `suitor()` function returns a
@@ -146,11 +142,11 @@ extracted. The possible option values are summarized in the
 following table and they can be used in the same manner as `suitor()`.
 
 ```{r table2, echo=FALSE}
-v1 <- c("min.value", "n.starts", "n.cores", "print")
+v1 <- c("min.value", "n.starts", "print")
 v2 <- c("Minimum value of matrix before factorizing", 
-        "Number of starting points", "Number of cores to use",
+        "Number of starting points",
         "0 or 1 to print info (0=no printing)")
-v3 <- c("1e-4", "30", "1", "1")
+v3 <- c("1e-4", "30", "1")
 tab2 <- data.frame(Name=v1, Description=v2, "Default Value"=v3,
                    stringsAsFactors=FALSE, check.names=FALSE)
 knitr::kable(tab2)
