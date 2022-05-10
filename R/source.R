@@ -99,7 +99,7 @@ set_op_par <- function(op) {
     n.runs  <- length(op$seeds)*length(op$kfold.vec)*length(rvec)
 
     bp <- op[["BPPARAM", exact=TRUE]]
-    if (is.null(bp)) bp <- bpparam()
+    if (is.null(bp)) bp <- SerialParam()
     op$n.cores <- bpnworkers(bp)
     op$BPPARAM <- bp 
     
