@@ -1,8 +1,8 @@
 Package: SUITOR
 Title: Selecting the number of mutational signatures through
         cross-validation
-Version: 0.99.18
-Date: 2022-05-10
+Version: 1.16.0
+Date: 2026-09-11
 Authors@R: c(person(given="DongHyuk", family="Lee", role="aut", email="dhyuklee@pusan.ac.kr"),
              person(given="Bin", family="Zhu", role="aut", email="bin.zhu@nih.gov"),
              person(given="Bill", family="Wheeler", role="cre", email="wheelerb@imsweb.com"))
@@ -16,3 +16,8 @@ Suggests: devtools, MutationalPatterns, RUnit, BiocManager,
 NeedsCompilation: yes
 BugReports: https://github.com/wheelerb/SUITOR/issues
 VignetteBuilder: knitr
+Packaged: 2026-09-11 20:25:34 UTC; wheelerwi
+Author: DongHyuk Lee [aut],
+  Bin Zhu [aut],
+  Bill Wheeler [cre]
+Maintainer: Bill Wheeler <wheelerb@imsweb.com>

@@ -163,9 +163,7 @@ char name[10];
 */
 
 
-static double * dVec_alloc(n, initFlag, initVal)
-int n, initFlag;
-double initVal;
+static double * dVec_alloc(int n, int initFlag, double initVal)
 {
   int i;
   double *ret, *p;
@@ -182,8 +180,7 @@ double initVal;
 
 } 
 
-static int * iVec_alloc(n, initFlag, initVal)
-int n, initFlag, initVal;
+static int * iVec_alloc(int n, int initFlag, int initVal)
 {
   int i, *ret, *p;
 
@@ -200,9 +197,7 @@ int n, initFlag, initVal;
 } 
 
 
-static char * cVec_alloc(n, initFlag, initVal)
-int n, initFlag;
-char initVal;
+static char * cVec_alloc(int n, int initFlag, char initVal)
 {
   char *ret, *pret;
   int i;
@@ -219,9 +214,7 @@ char initVal;
 
 } 
 
-static void copy_dVec(v, n, ret)
-double *v, *ret;
-int n;
+static void copy_dVec(double *v, int n, double *ret)
 {
   int i;
   double *p1, *p2;
@@ -230,9 +223,7 @@ int n;
 
 }
 
-static void matrixMult(m1, m1_nr, m1_nc, m2, m2_nc, ret)
-double *m1, *m2, *ret;
-int m1_nr, m1_nc, m2_nc;
+static void matrixMult(double *m1, int m1_nr, int m1_nc, double *m2, int m2_nc, double *ret)
 {
   /*  all matrices are stacked columns, same for ret */
 
@@ -253,9 +244,7 @@ int m1_nr, m1_nc, m2_nc;
 
 }
 
-static int which_max(v, n) 
-double *v;
-int n;
+static int which_max(double *v, int n) 
 {
 
   int i, maxi;
@@ -277,10 +266,9 @@ int n;
   return(maxi);
 }
 
-static void which_max_cols(mat, nr, nc, ret) 
-double *mat; /* stacked columns */
-int nr, nc, *ret;
+static void which_max_cols(double *mat, int nr, int nc, int *ret) 
 {
+  /* mat has stached columns */
   int i;
 
   for (i=0; i<nc; i++) {
@@ -289,10 +277,9 @@ int nr, nc, *ret;
 
 }
 
-static int update_cons(cons, cons_len, index, nc)
-binary *cons;  /* cons is updated in this function */
-int cons_len, *index, nc; 
+static int update_cons(binary *cons, int cons_len, int *index, int nc)
 {
+  /* cons is updated in this function */
   /*cons  <- outer(index, index, function(x,y) ifelse(x==y, 1,0))*/
   int i, j, indi, cons_index, anyChange=0;
   binary isEq;
@@ -320,10 +307,7 @@ int cons_len, *index, nc;
 }
 
 /* cons and inc get updated */
-static int myStopFun(cons, cons_len, inc, hMat, hnr, hnc, maxIndex) 
-binary *cons;
-int cons_len, *inc, hnr, hnc, *maxIndex;
-double *hMat;
+static int myStopFun(binary *cons, int cons_len, int *inc, double *hMat, int hnr, int hnc, int *maxIndex) 
 {
   int anyChange, ret=0;
 
@@ -345,9 +329,7 @@ double *hMat;
 
 }
 
-static void get_runif_vec(v, n, a, b)
-double *v, a, b;
-int n;
+static void get_runif_vec(double *v, int n, double a, double b)
 {
   int i;
 
@@ -356,9 +338,7 @@ int n;
 }
 
 /* Return sum of idxMat (used later) */
-static int get_idxMat0(idx, nr, nc, k, kfold) 
-binary *idx;
-int nr, nc, k, kfold;
+static int get_idxMat0(binary *idx, int nr, int nc, int k, int kfold) 
 {
   int i, val, offset, ret=0;
 
@@ -382,10 +362,7 @@ int nr, nc, k, kfold;
   return(ret);
 }
 
-static double loglike(input, log_input, input_k_hat, idxMat, delta_denom, len, which_idx)
-double *input, *log_input, *input_k_hat, delta_denom;
-int len;
-binary *idxMat, which_idx;
+static double loglike(double *input, double *log_input, double *input_k_hat, binary *idxMat, double delta_denom, int len, binary which_idx)
 {
    int i;
    double ret=0.0, inputi, lik, inputkhati, tmp, logDD;
@@ -413,9 +390,7 @@ binary *idxMat, which_idx;
 
 }
 
-static void replaceZeroVal_dVec(v, n, minval)
-double *v, minval;
-int n;
+static void replaceZeroVal_dVec(double *v, int n, double minval)
 {
   int i;
 
@@ -425,9 +400,7 @@ int n;
 
 }
 
-static double get_delta_denom(v, n) 
-double *v;
-int n;
+static double get_delta_denom(double *v, int n) 
 {
   int i;
   double minv=LARGEDOUBLE, tmp;
@@ -441,9 +414,7 @@ int n;
   return(minv);
 }
 
-static double get_max(v, n)
-double *v;
-int n;
+static double get_max(double *v, int n)
 {
   int i;
   double maxv=MINUSINFINITY, tmp;
@@ -457,9 +428,7 @@ int n;
 
 }
 
-static void my_update_H(pV, w, h, wnr, wnc, hnc)
-double *pV, *w, *h;
-int wnr, wnc, hnc;
+static void my_update_H(double *pV, double *w, double *h, int wnr, int wnc, int hnc)
 {
    int n, r, p, ncterms=0, vr, iH, jH, u, k, ii;
    double *res, *pW, *pH, *p_res, *sumW, *pWH, tmp_res, w_sum, wh_term;
@@ -536,9 +505,7 @@ int wnr, wnc, hnc;
 
 }
 
-static void my_update_W(pV, w, h, wnr, wnc, hnc)
-double *pV, *w, *h;
-int wnr, wnc, hnc;
+static void my_update_W(double *pV, double *w, double *h, int wnr, int wnc, int hnc)
 {
 
 	double *res, *pW, *pH, *pWH, *p_res, *sumH, wh_term, h_sum, tmp_res;
@@ -608,10 +575,7 @@ int wnr, wnc, hnc;
     R_Free(pWH);
 }
 
-static void my_update_brunet(i, x, w, h, str)
-int i;
-double *x, *w, *h;
-NMFSTR *str;
+static void my_update_brunet(int i, double *x, double *w, double *h, NMFSTR *str)
 {
   int j, wnr=str->wnr, wnc=str->wnc, hnc=str->hnc;
   double eps=str->update_eps;
@@ -633,9 +597,7 @@ NMFSTR *str;
 
 }
 
-static void get_init_WH(runifVec, w, h, wlen, hlen, maxval)
-double *runifVec, *w, *h, maxval;
-int wlen, hlen;
+static void get_init_WH(double *runifVec, double *w, double *h, int wlen, int hlen, double maxval)
 {
   int i, j=0;
 
@@ -652,9 +614,7 @@ int wlen, hlen;
 
 }
 
-static void call_nmf(mat, str)
-double *mat;
-NMFSTR *str;
+static void call_nmf(double *mat, NMFSTR *str)
 {
   /* seed must be set before .C call */
 
@@ -711,10 +671,7 @@ binary *idxMat;
 }
 */
 
-static void update_x_k(x_k, x_k_hat, idxMat, n)
-double *x_k, *x_k_hat;
-binary *idxMat;
-int n;
+static void update_x_k(double *x_k, double *x_k_hat, binary *idxMat, int n)
 {
   int i;
   for (i=0; i<n; i++) {
@@ -835,9 +792,7 @@ static void quicksort(int start, int stop, double *x)
      }
 }
 
-static double get_median(v, n)
-double *v;
-int n;
+static double get_median(double *v, int n)
 {
   int m;
   double ret;
@@ -860,10 +815,7 @@ int n;
 
 }	
 
-static void get_init_x_k(x, x_k, idxMat, nr, nc, tmpvec, minvalue)
-double *x, *x_k, *tmpvec, minvalue;
-binary *idxMat;
-int nr, nc;
+static void get_init_x_k(double *x, double *x_k, binary *idxMat, int nr, int nc, double *tmpvec, double minvalue)
 {
   int i, j, ii, len, vii;
   double med;
@@ -913,10 +865,9 @@ int nr, nc;
 }
 */
 
-static void get_colsums(x, nr, nc, ret)
-double *x, *ret; /* x is vector of  stacked columns */
-int nr, nc;
+static void get_colsums(double *x, int nr, int nc, double *ret)
 {
+  /* x is vector of  stacked columns */
   int i, j, k=0;
   double sum;
 
@@ -931,9 +882,7 @@ int nr, nc;
 
 }
 
-static void transpose(v, nr, nc, ret)
-double *v, *ret;
-int nr, nc;
+static void transpose(double *v, int nr, int nc, double *ret)
 {
   int i, j, k=0;
 
@@ -946,9 +895,7 @@ int nr, nc;
 
 }
 
-static void ECM_update_h(h1, h0, w0, x_k, hnr, hnc, wnr, wnc, xnr, xnc, vM, vN, vN2)
-double *h1, *h0, *w0, *x_k, *vM, *vN, *vN2;
-int hnr, hnc, wnr, wnc, xnr, xnc;
+static void ECM_update_h(double *h1, double *h0, double *w0, double *x_k, int hnr, int hnc, int wnr, int wnc, int xnr, int xnc, double *vM, double *vN, double *vN2)
 {
   int i, j, k, xlen;
 
@@ -980,9 +927,7 @@ int hnr, hnc, wnr, wnc, xnr, xnc;
 
 }
 
-static void ECM_update_w(w1, h1, w0, x_k, hnr, hnc, wnr, wnc, xnr, xnc, vM, vN, vN2)
-double *h1, *w1, *w0, *x_k, *vM, *vN, *vN2;
-int hnr, hnc, wnr, wnc, xnr, xnc;
+static void ECM_update_w(double *w1, double *h1, double *w0, double *x_k, int hnr, int hnc, int wnr, int wnc, int xnr, int xnc, double *vM, double *vN, double *vN2)
 {
   int i, j, k, xlen;
   double tmp;
@@ -1014,8 +959,7 @@ int hnr, hnc, wnr, wnc, xnr, xnc;
 
 }
 
-static int ECM_alg(str)
-NMFSTR *str;
+static int ECM_alg(NMFSTR *str)
 {
   /* x_k, x_k_hat, delta_denom, EM_iter get updated in str */
 
@@ -1090,9 +1034,7 @@ NMFSTR *str;
 
 }
 
-static void init_wh_rank(str, rank)
-NMFSTR *str;
-int rank;
+static void init_wh_rank(NMFSTR *str, int rank)
 {
   int n;
 
@@ -1116,8 +1058,7 @@ int rank;
 
 }
 
-static void suitor_main(str)
-NMFSTR *str;
+static void suitor_main(NMFSTR *str)
 {
   /* The seed has been set in the R code before this call.
      kVec and rankVec should be ordered by kVec
@@ -1200,9 +1141,7 @@ NMFSTR *str;
 }
 
 /* log(x) is set to 0 if x = 0 */
-static void init_logx(x, logx, n)
-double *x, *logx;
-int n;
+static void init_logx(double *x, double *logx, int n)
 {
   int i;
   double tmp;
@@ -1218,10 +1157,7 @@ int n;
 }
 
 
-static void NMFSTR_init(str, iargs, dargs, xmat) 
-NMFSTR *str;
-int *iargs;
-double *dargs, *xmat;
+static void NMFSTR_init(NMFSTR *str, int *iargs, double *dargs, double *xmat) 
 {
   int n;
 
@@ -1308,9 +1244,7 @@ double *dargs, *xmat;
   }
 }
 
-static void NMFSTR_free(str, EMflag)
-NMFSTR *str;
-int EMflag;
+static void NMFSTR_free(NMFSTR *str, int EMflag)
 {
 
   R_Free(str->cons);
@@ -1336,9 +1270,7 @@ int EMflag;
 
 }
 
-void C_call_nmf(mat, iargs, dargs, retW, retH)
-double *mat, *dargs, *retW, *retH;
-int *iargs;
+void C_call_nmf(double *mat, int *iargs, double *dargs, double *retW, double *retH)
 {
   NMFSTR str;
 
@@ -1358,9 +1290,7 @@ int *iargs;
   return;
 }
 
-void C_call_suitor(mat, iargs, dargs, rankVec, kVec, ret_train, ret_test, ret_convVec, ret_EM_niterVec)
-double *mat, *dargs, *ret_train, *ret_test;
-int *iargs, *rankVec, *kVec, *ret_convVec, *ret_EM_niterVec;
+void C_call_suitor(double *mat, int *iargs, double *dargs, int *rankVec, int *kVec, double *ret_train, double *ret_test, int *ret_convVec, int *ret_EM_niterVec)
 {
   NMFSTR str;
 
