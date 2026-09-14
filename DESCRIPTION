@@ -1,8 +1,8 @@
 Package: SUITOR
 Title: Selecting the number of mutational signatures through
         cross-validation
-Version: 1.16.0
-Date: 2026-09-11
+Version: 1.15.1
+Date: 2026-09-14
 Authors@R: c(person(given="DongHyuk", family="Lee", role="aut", email="dhyuklee@pusan.ac.kr"),
              person(given="Bin", family="Zhu", role="aut", email="bin.zhu@nih.gov"),
              person(given="Bill", family="Wheeler", role="cre", email="wheelerb@imsweb.com"))
