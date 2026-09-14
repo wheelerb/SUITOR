@@ -16,8 +16,3 @@ Suggests: devtools, MutationalPatterns, RUnit, BiocManager,
 NeedsCompilation: yes
 BugReports: https://github.com/wheelerb/SUITOR/issues
 VignetteBuilder: knitr
-Packaged: 2026-09-11 20:25:34 UTC; wheelerwi
-Author: DongHyuk Lee [aut],
-  Bin Zhu [aut],
-  Bill Wheeler [cre]
-Maintainer: Bill Wheeler <wheelerb@imsweb.com>
